@@ -22,3 +22,16 @@ Com a opção `-f`, o Pico é colocado automaticamente em modo **BOOTSEL** antes
 ```bash
 picotool load <project_name>.uf2 -f
 ```
+
+# Roda o código Micropython no Pi Pico
+
+```bash
+sudo mpremote a0 run templates/micropython/main.py
+```
+
+## Dependências:
+
+- pico-sdk
+- picotool
+- micropython
+- micropython-mpremote
