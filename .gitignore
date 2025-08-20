@@ -53,3 +53,54 @@ dkms.conf
 
 # debug information files
 *.dwo
+
+# ==========================
+# Compilação em C / Embedded
+# ==========================
+*.o
+*.a
+*.so
+*.out
+*.elf
+*.bin
+*.hex
+*.map
+*.d
+*.lst
+
+# Diretórios de build
+build/
+Build/
+BUILD/
+bin/
+obj/
+out/
+dist/
+
+# ==========================
+# MicroPython / Python
+# ==========================
+*.pyc
+*.pyo
+*.pyd
+*.mpy
+_pycache_/
+.micropython/
+
+# ==========================
+# IDEs e Editores
+# ==========================
+# VSCode
+.vscode/
+
+# Linux
+*~
+.cache/
+*.swp
+*.swo
+
+# ==========================
+# Outros
+# ==========================
+*.log
+*.tmp
