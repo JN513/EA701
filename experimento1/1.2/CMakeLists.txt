@@ -7,7 +7,7 @@ project(main)
 pico_sdk_init()
 
 add_executable(main
-    main.c
+    main.cpp
     )
 
 # pull in common dependencies
