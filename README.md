@@ -1,6 +1,6 @@
 # EA701
 
-Repositorio da disciplina **EA701 - Introdução a Sistemas Embarcados**
+Repositório da disciplina **EA701 - Introdução a Sistemas Embarcados**
 FEEC / Unicamp
 
 ## Pico Tool - Comandos
