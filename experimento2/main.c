@@ -1,32 +1,30 @@
-#include <stdio.h>
 #include "pico/stdlib.h"
 
-#define R_PIN 13
-#define G_PIN 11
-#define B_PIN 12
+#define LED 13
+#define BTN 5
 
-
-int main(){
+int main() {
     stdio_init_all();
+    gpio_init(LED); gpio_set_dir(LED, GPIO_OUT);
+    gpio_init(BTN); gpio_set_dir(BTN, GPIO_IN); gpio_pull_down(BTN);
 
-    printf("Hello, World!\n");
+    bool last = false, state = false;
 
-    gpio_init(R_PIN);
-    gpio_init(G_PIN);
-    gpio_init(B_PIN);
-    gpio_set_dir(R_PIN, GPIO_OUT);
-    gpio_set_dir(G_PIN, GPIO_OUT);
-    gpio_set_dir(B_PIN, GPIO_OUT);
-
-    gpio_put(R_PIN, 0);
-    gpio_put(G_PIN, 0);
-    gpio_put(B_PIN, 0);
+    // Defina aqui a carga artificial: número de iterações do laço vazio
+    int N = 8000;   // experimente 2000, 8000, 32000, 128000
 
     while (true) {
-        printf("Counter: %d\n", counter);
-        gpio_put(B_PIN, 1);
-        sleep_ms(500);
-        gpio_put(B_PIN, 0);
-        sleep_ms(500);
+        bool v = gpio_get(BTN);
+        if (v && !last) {
+            state = !state;
+            gpio_put(LED, state);
+            sleep_ms(20);   // debounce simples
+        }
+        last = v;
+
+        // Laço vazio para simular CPU ocupada
+        for (volatile int i=0; i<N; i++) {
+            __asm volatile("nop"); // "no operation" - só gasta tempo
+        }
     }
 }

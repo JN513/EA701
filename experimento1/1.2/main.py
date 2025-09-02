@@ -1,20 +1,21 @@
-# exemplo_pico.py
-# Código em MicroPython para Raspberry Pi Pico
-# Faz o LED onboard piscar a cada 0.5s
+from machine import Pin
+import time
 
-from machine import Pin, Timer
+class LedRGB:
+    def __init__(self, r=13, g=11, b=12):
+        self.r = Pin(r, Pin.OUT)
+        self.g = Pin(g, Pin.OUT)
+        self.b = Pin(b, Pin.OUT)
 
-# LED onboard do Pico fica no pino 25
-led = Pin(12, Pin.OUT)
+    def set(self, r=0, g=0, b=0):
+        self.r.value(r)
+        self.g.value(g)
+        self.b.value(b)
 
-# Função que alterna o estado do LED
-def toggle_led(timer):
-    led.toggle()
+    def off(self):
+        self.set(0,0,0)
 
-# Timer chama a função a cada 500ms
-timer = Timer()
-timer.init(freq=2, mode=Timer.PERIODIC, callback=toggle_led)
-
-# Mantém o programa rodando
-while True:
-    pass
+led = LedRGB()
+led.set(1,0,0)  # vermelho
+time.sleep(1)
+led.off()
