@@ -24,10 +24,10 @@
 % ---------------- Experiência 1 ----------------
 \section{Experiência 1}
 
-\subsection{1.1 Identificação das GPIOs do LED RGB}
+\subsection{Identificação das GPIOs do LED RGB}
 \textbf{Pergunta:} Identifique as GPIOs que estão conectadas no LED RGB da BitDogLab. \\
 
-
+\noindent
 \textbf{Resposta:} As conexões do LED RGB com resistores de proteção estão descritas a seguir:  
 \begin{itemize}
     \item Vermelho: GPIO 13 com resistor de 220 $\Omega$
@@ -35,18 +35,20 @@
     \item Azul: GPIO 12 com resistor de 150 $\Omega$
 \end{itemize}
 
-\subsection{1.2 Níveis lógicos do RP2040}
+\subsection{Níveis lógicos do RP2040}
 \textbf{Pergunta:} Qual a tensão de saída de cada nível lógico do RP2040? \\
 
+\noindent
 \textbf{Resposta:} Os níveis lógicos do microcontrolador RP2040 são:  
 \begin{itemize}
     \item Nível lógico 0: 0 V
     \item Nível lógico 1: 3.3 V
 \end{itemize}
 
-\subsection{1.3 Circuito básico e cálculo dos resistores}
+\subsection{Circuito básico e cálculo dos resistores}
 \textbf{Pergunta:} Desenhe o circuito básico para acender este LED com as GPIOs. Calcule o valor de cada resistor. \\
 
+\noindent
 \textbf{Resposta:} O circuito básico do LED RGB está ilustrado na Figura \ref{fig:circuito_led}.  
 
 \begin{figure}[H]
@@ -66,6 +68,7 @@ Os valores de corrente e tensão utilizados para cada cor do Led RGB podem ser e
 \subsection{Tarefa 1.1 -- Comparação entre linguagens}
 \textbf{Pergunta:} Comparar o tempo de resposta e fluxo de execução entre C e MicroPython. Sugira um método para obter esses valores e crie uma tabela para realizarmos um Benchmark. \\
 
+\noindent
 \textbf{Resposta:}  
 Para realizar o Benchmark entre as duas implementações (C e MicroPython), podemos analisar o tempo gasto para executar rotinas simples, como configuração de GPIOs, execução de funções básicas (acender um LED, imprimir uma string) e cálculos matemáticos. Os resultados obtidos estão apresentados na Tabela \ref{tab:benchmark}.  
 
@@ -90,31 +93,35 @@ Para realizar o Benchmark entre as duas implementações (C e MicroPython), pode
 \subsection{Tarefa 1.2 -- Comparativo Imperativo vs OO}
 \textbf{Pergunta:} Comparar tamanho do código (em bytes), tempo de resposta e fluxo de execução entre os modos imperativo e OO para ambos: MicroPython e C. Sugira um método para obter esses valores e crie uma tabela para realizarmos um Benchmark.  \\
 
-\textbf{Resposta:}  
-Uma comparação direta do tamanho do código em bytes não é apropriada, pois se trata de linguagens e paradigmas diferentes. Técnicas de escrita distintas podem resultar em códigos mais ou menos verbosos. No caso do C, a implementação de OO (via ponteiros de funções, structs com métodos ou C++) é amplamente otimizada pelo compilador, reduzindo overhead em tempo de execução.  
+\noindent
+Uma comparação direta entre o tamanho das duas linguagens não é particularmente interessante, principalmente devido à grande diferença de paradigmas e formas de execução. A implementação em C gera um binário completo, contendo todas as instruções necessárias para o funcionamento do programa, enquanto a implementação em MicroPython gera um bytecode que é executado em uma máquina virtual (VM).
 
-Ainda assim, é possível avaliar a diferença de desempenho comparando implementações imperativas e orientadas a objetos quanto ao tempo de resposta e eficiência. Essa análise está resumida na Tabela \ref{tab:benchmark_oo}.  
+Por outro lado, comparar apenas o tamanho do código-fonte também não é adequado, pois depende fortemente da aplicação e do programador. Uma implementação simples em MicroPython tem grandes chances de ser menor que sua equivalente em C. No entanto, em casos que exigem acesso direto a registradores ou o uso de recursos específicos, a implementação em C é geralmente mais simples e eficiente.
+
+De toda forma, a Tabela \ref{tab:benchmark_oo} apresenta um comparativo de tamanho de código, considerando, no caso do C, o tamanho do binário gerado (não o arquivo UF2), e, no caso do MicroPython, o tamanho do bytecode produzido.
+
+A tabela \ref{tab:benchmark_oo}
 
 \begin{table}[H]
     \centering
     \label{tab:benchmark_oo}
-    \begin{tabular}{lcccc}
+    \begin{tabular}{lcc}
         \toprule
-        Paradigma & Linguagem & Tamanho Código (bytes) & Tempo de Resposta ($\mu$s) & Observações \\
+        Paradigma & Linguagem & Tamanho Código (bytes) \\
         \midrule
-        Imperativo & C        & ... & ... & ... \\
-        OO         & C        & ... & ... & ... \\
-        Imperativo & Python   & ... & ... & ... \\
-        OO         & Python   & ... & ... & ... \\
+        Imperativo & C        & 25K  \\
+        OO         & C        & 25K  \\
+        Imperativo & Python   & 259  \\
+        OO         & Python   & 320  \\
         \bottomrule
     \end{tabular}
-    \caption{Benchmark entre Imperativo e OO em C e Python.}
+    \caption{Benchmark entre tamanho de código.}
 \end{table}
 
 % ---------------- Experiência 2 ----------------
 \section{Experiência 2}
 
-\subsection{2.1 GPIOs conectados aos botões}
+\subsection{GPIOs conectados aos botões}
 \textbf{Pergunta:} Identifique as GPIOs que estão conectadas aos 3 botões.  
 
 \textbf{Resposta:}  
@@ -136,7 +143,7 @@ A identificação está apresentada na Tabela \ref{tab:botoes}.
     \label{tab:botoes}
 \end{table}
 
-\subsection{2.2 Limites de tensão para nível lógico}
+\subsection{Limites de tensão para nível lógico}
 \textbf{Pergunta:} Quais os limites de tensão considerados como nível baixo e alto no microcontrolador utilizado? \\ 
 
 \textbf{Resposta:}  
@@ -147,9 +154,10 @@ A identificação está apresentada na Tabela \ref{tab:botoes}.
 
 Com $V_{IL(max)}$ sendo 0.8V e $V_{IH(min)}$ sendo 2.0V.
 
-\subsection{2.3 Esquema dos botões}
+\subsection{Esquema dos botões}
 \textbf{Pergunta:} Represente como os botões estão conectados ao microcontrolador.  \\
 
+\noindent
 \textbf{Resposta:}  
 O esquema está mostrado na Figura \ref{fig:circuito_botoes}.  
 
@@ -161,13 +169,62 @@ O esquema está mostrado na Figura \ref{fig:circuito_botoes}.
 \end{figure}
 
 \subsection{Debounce, Polling e IRQ}
-\textbf{Funcionalidade:} Confirmar a alternância do LED nos dois modos.  
 
-\textbf{Latência:} O aumento da carga no modo Polling provoca maior latência, enquanto o uso de IRQ garante resposta mais imediata.  
+\begin{table}[H]
+    \centering
+    \begin{tabular}{lcccccc}
+        \toprule
+         Método & Carga(N) & Nº de alternâncias do LED & Perdas & Latência & Observação\\
+         \midrule
+         Polling & 0 & 10 & 0 & 0 & \\
+         Polling & 2k & 10 & 0 & 0 & \\
+         Polling & 8k & 10 & 0 & 0 & \\
+         Polling & 32k & 6 & 4 & 1 & \\
+         Polling & 128k & 1 &  9 & 3 & \\
+         \bottomrule
+    \end{tabular}
+    \caption{Tabela de teste de polling para 10 cliques}
+    \label{tab:polling_compair}
+\end{table}
 
-\textbf{Consumo de energia:} O IRQ é mais eficiente, pois evita que a CPU fique em espera constante.  
+\begin{table}[ht!]
+    \centering
+    \begin{tabular}{lcccccc}
+        \toprule
+         Método & Carga(N) & Nº de alternâncias do LED & Perdas & Latência & Observação\\
+         \midrule
+         IRQ & 0 & 10 & 0 & 0 & \\
+         IRQ + Carga & 32k & 10 & 0 & 0 & \\
+         \bottomrule
+    \end{tabular}
+    \caption{Tabela de teste de IRQ para 10 cliques}
+    \label{tab:irq_compair}
+\end{table}
 
-\textbf{Aplicações:} Polling pode ser suficiente em sistemas simples (ex.: leitura periódica de sensores), enquanto IRQ é essencial em sistemas críticos (ex.: teclados, comunicações seriais).  
+\noindent
+\textbf{Pergunta (Funcionalidade):} Confirme se o LED alternou a cada toque nos dois modos (Polling e IRQ), com debounce funcionando. \\
+
+\noindent
+Ele alternou em ambos.   \\ 
+
+
+\noindent
+\textbf{Pergunta (Latência):} Descreva o efeito de aumentar a “carga” no laço do Polling e compare com o comportamento no modo IRQ. \\
+
+\noindent
+O aumento da carga no modo Polling provoca maior latência, enquanto o uso de IRQ garante resposta mais imediata.   \\
+
+\noindent
+\textbf{Pergunta (Consumo de energia):} Argumente por que o método baseado em IRQ tende a ser mais eficiente em consumo de CPU e energia. Utilize as observações feitas durante o experimento. \\
+
+\noindent
+O IRQ é mais eficiente, pois evita que a CPU fique em espera constante. \\
+
+\noindent
+\textbf{Pergunta (Aplicações):} Quando usar o quê? \\
+
+\noindent
+Polling pode ser suficiente em sistemas simples (ex.: leitura periódica de sensores), enquanto IRQ é essencial em sistemas críticos (ex.: teclados, comunicações seriais).  \\
 
 \subsection{Tabela Comparativa -- Polling × IRQ}
 A Tabela \ref{tab:polling_irq} resume a comparação entre Polling e IRQ.  
@@ -193,22 +250,75 @@ A Tabela \ref{tab:polling_irq} resume a comparação entre Polling e IRQ.
 % ---------------- Experiência 3 ----------------
 \section{Experiência 3}
 
-\subsection{Demonstração}
-\textbf{Vídeo:} Disponível no YouTube em: \url{https://youtube.com/xxxxxx} \#EA701.  
+\subsection{Fluxograma}
+\noindent
+\textbf{Pergunta:} Fluxograma do programa (laço → leitura → detecção de borda → toggle → aplicar LEDs). \\
 
-\subsection{Comparação de código}
-Comparar a simplicidade entre implementações em Python OO e em C modular, destacando clareza e manutenção do código.  
+\noindent
+O digrama está presente na Figura \ref{fig:togle}. \\
 
-\subsection{Reflexão: IRQ + OO}
-Discutir casos em que a combinação de IRQ e paradigma OO é vantajosa em sistemas embarcados reais (ex.: sistemas de tempo real, IoT e automação).  
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{diagrama.pdf}
+    \caption{Fluxograma do programa de toggle}
+    \label{fig:togle}
+\end{figure}
 
-\subsection{Expansão para 10 botões}
-Discutir a viabilidade de Polling versus IRQ em um sistema com 10 botões. O Polling aumenta consideravelmente o consumo e a latência, enquanto o IRQ se mostra mais adequado.  
+\subsection{Implementação e demonstração}
+\noindent
+\textbf{Pergunta:} Implementações em C e MicroPython (conforme códigos acima ou variações próprias). \\
+
+\noindent
+A implementação está disponível no repositório \href{https://github.com/JN513/EA701/tree/main/roteiro1/experimento3}{https://github.com/JN513/EA701}.\\
+
+\noindent
+\textbf{Pergunta:} Vídeo curto (link público) mostrando todas as combinações possíveis (R, G, B, RG, RB, GB, RGB). \\
+
+\noindent
+\textbf{Vídeo:} Disponível em: \href{https://github.com/JN513/EA701}{https://github.com/JN513/EA701} 
+
+\subsection{Discução}
+
+Neste caso em específico, a diferença entre usar C e MicroPython em termos de esforço de trabalho é muito pequena. Um programador já acostumado com C provavelmente acharia a implementação em Python menos prática, principalmente pela forma diferente como as coisas são estruturadas.
+
+O debounce, nesta implementação, evita cliques múltiplos tanto no acionamento quanto no desligamento do botão. No entanto, o valor usado como exemplo (20 ms) é muito baixo; algo entre 50 e 150 ms seria mais adequado.
+
+Além disso, o uso de IRQs eliminaria a necessidade do loop de varredura dos botões.
 
 % ---------------- Conclusão ----------------
-\section{Conclusão}
-Neste roteiro, foram explorados os conceitos de GPIOs, LEDs RGB, botões, limites de tensão lógica, técnicas de tratamento de eventos (Polling e IRQ) e comparações entre paradigmas de programação (imperativo e OO) em C e Python.  
+\section{Experimento 4}
 
-Os experimentos demonstraram diferenças significativas de desempenho entre C e MicroPython, além da importância da escolha correta entre Polling e IRQ de acordo com a aplicação. Como recomendação, projetos futuros devem considerar o uso de IRQ em sistemas mais complexos ou com múltiplos eventos assíncronos, e a escolha de linguagem/paradigma deve levar em conta tanto desempenho quanto legibilidade e manutenção do código.  
+\subsection{Gravação e demonstração}
+
+\noindent
+\textbf{Pergunta:} Testar e filmar o funcionamento (todas as combinações RGB). Inclua seu filme com um link público do youtube. \\
+
+\noindent
+\textbf{Vídeo:} Disponível em: \href{https://github.com/JN513/EA701}{https://github.com/JN513/EA701} 
+
+\subsection{Comparação de simplicidade}
+
+\noindent
+\textbf{Pergunta:} Comparar: simplicidade do código em Python OO vs C modular com struct. \\
+
+\noindent
+A implementação em Python é consideravelmente mais legível e intuitiva do que em C com structs. No entanto, é possível adotar uma abordagem semelhante em C++, que, assim como o MicroPython, oferece suporte a classes, embora de forma mais verbosa.
+
+Para desenvolvedores acostumados à forma como as coisas funcionam em C, a diferença em termos de simplicidade é mínima. \\
+
+\noindent
+\textbf{Pergunta:} Refletir: em quais casos o uso de IRQ + OO é vantajoso em sistemas embarcados reais (por ex.: interface homem-máquina, teclados matriciais, comunicação) \\
+
+\noindent
+Esta combinação, por si só, não traz vantagem significativa para o sistema. O uso de IRQs, por outro lado, acelera consideravelmente o tempo de resposta e otimiza a utilização da CPU. O uso de programação orientada a objetos (OO) pode facilitar a implementação de projetos maiores e mais complexos, mas exemplos de grande porte, como o Kernel Linux, o Zephyr e o ESP-IDF, demonstram que é possível organizar um projeto de forma estruturada sem recorrer obrigatoriamente à OO. \\
+
+\subsection{Expansão da Abordagem}
+
+\noindent
+\textbf{Pergunta:} Como você adaptaria este mesmo programa se houvesse 10 botões (polling seria viável?) \\
+
+Eu apenas adicionaria um case na função de callback para identificar qual GPIO foi pressionada e, com base nisso, executar a ação correspondente.
+
+O polling pode ser viável dependendo da carga de trabalho adicional. Vale lembrar que teclados antigos, como o BTC 5339-R, que utilizam o microcontrolador Intel 8049, funcionavam justamente por varredura. Para microcontroladores modernos, como o Raspberry Pi Pico, que operam na faixa de MHz, monitorar 10 GPIOs via polling seria uma tarefa trivial, quase como caminhar em um planalto.
 
 \end{document}

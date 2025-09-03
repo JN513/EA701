@@ -1,7 +1,7 @@
 #include "pico/stdlib.h"
 #include <stdbool.h>
 
-#define DEBOUNCE_MS 40
+#define DEBOUNCE_MS 100
 
 typedef struct {
     uint pin;

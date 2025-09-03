@@ -1,7 +1,11 @@
 # EA701
 
-Repositório da disciplina **EA701 - Introdução a Sistemas Embarcados**
-FEEC / Unicamp
+Repositório da disciplina **EA701 - Introdução a Sistemas Embarcados** da FEEC / Unicamp
+
+Alunos:
+
+- Ana Beatriz Barbosa Yoshida
+- Julio Nunes Avelar
 
 ## Pico Tool - Comandos
 
@@ -35,6 +39,7 @@ sudo mpremote a0 run templates/micropython/main.py
 - picotool
 - micropython
 - micropython-mpremote
+- mpy-cross
 
 ## Instalação
 
