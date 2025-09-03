@@ -1,6 +1,7 @@
 \documentclass{article}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
+\usepackage{lmodern}
 \usepackage[brazil]{babel}
 \usepackage{geometry}
 \usepackage{graphicx}
@@ -9,6 +10,25 @@
 \usepackage{booktabs}
 \usepackage{amsmath}
 \usepackage{hyperref}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\lstdefinestyle{mystyle}{
+    language=C,
+    backgroundcolor=\color{black!5},   
+    commentstyle=\color{green!50!black},
+    keywordstyle=\color{blue},
+    numberstyle=\tiny\color{gray},
+    stringstyle=\color{red},
+    basicstyle=\ttfamily\footnotesize,
+    breaklines=true,
+    numbers=left,
+    numbersep=5pt,
+    frame=single,
+    captionpos=b
+}
+
+\lstset{style=mystyle}
 
 \title{Roteiro 1}
 \author{Ana Beatriz Barbosa Yoshida - RA: 245609 \\ Julio Nunes Avelar - RA: 241163}
@@ -257,7 +277,7 @@ A Tabela \ref{tab:polling_irq} resume a comparação entre Polling e IRQ.
 \noindent
 O digrama está presente na Figura \ref{fig:togle}. \\
 
-\begin{figure}
+\begin{figure}[ht!]
     \centering
     \includegraphics[width=\linewidth]{diagrama.pdf}
     \caption{Fluxograma do programa de toggle}
@@ -268,14 +288,76 @@ O digrama está presente na Figura \ref{fig:togle}. \\
 \noindent
 \textbf{Pergunta:} Implementações em C e MicroPython (conforme códigos acima ou variações próprias). \\
 
-\noindent
-A implementação está disponível no repositório \href{https://github.com/JN513/EA701/tree/main/roteiro1/experimento3}{https://github.com/JN513/EA701}.\\
+\begin{lstlisting}[caption={Controle de LEDs com botões no Raspberry Pi Pico}]
+#include "pico/stdlib.h"
+
+#define PIN_R 12
+#define PIN_G 13
+#define PIN_B 11
+#define BTN_A 5
+#define BTN_B 6
+#define BTN_C 10
+#define DEBOUNCE_MS 40
+
+int main() {
+    stdio_init_all();
+
+    gpio_init(PIN_R); gpio_set_dir(PIN_R, GPIO_OUT);
+    gpio_init(PIN_G); gpio_set_dir(PIN_G, GPIO_OUT);
+    gpio_init(PIN_B); gpio_set_dir(PIN_B, GPIO_OUT);
+
+    gpio_init(BTN_A); gpio_set_dir(BTN_A, GPIO_IN); gpio_pull_up(BTN_A);
+    gpio_init(BTN_B); gpio_set_dir(BTN_B, GPIO_IN); gpio_pull_up(BTN_B);
+    gpio_init(BTN_C); gpio_set_dir(BTN_C, GPIO_IN); gpio_pull_up(BTN_C);
+
+    bool r_on = false, g_on = false, b_on = false;
+    bool lastA = true, lastB = true, lastC = true;
+    absolute_time_t lastA_t = 0, lastB_t = 0, lastC_t = 0;
+
+    while (true) {
+        bool vA = gpio_get(BTN_A);
+        bool vB = gpio_get(BTN_B);
+        bool vC = gpio_get(BTN_C);
+        absolute_time_t now = get_absolute_time();
+
+        if (!vA && lastA) {
+            if (absolute_time_diff_us(lastA_t, now) >= DEBOUNCE_MS * 1000) {
+                r_on = !r_on;
+                gpio_put(PIN_R, r_on);
+                lastA_t = now;
+            }
+        }
+        lastA = vA;
+
+        if (!vB && lastB) {
+            if (absolute_time_diff_us(lastB_t, now) >= DEBOUNCE_MS * 1000) {
+                b_on = !b_on;
+                gpio_put(PIN_B, b_on);
+                lastB_t = now;
+            }
+        }
+        lastB = vB;
+
+        if (!vC && lastC) {
+            if (absolute_time_diff_us(lastC_t, now) >= DEBOUNCE_MS * 1000) {
+                g_on = !g_on;
+                gpio_put(PIN_G, g_on);
+                lastC_t = now;
+            }
+        }
+        lastC = vC;
+
+        sleep_ms(2);
+    }
+}
+\end{lstlisting}
+
 
 \noindent
 \textbf{Pergunta:} Vídeo curto (link público) mostrando todas as combinações possíveis (R, G, B, RG, RB, GB, RGB). \\
 
 \noindent
-\textbf{Vídeo:} Disponível em: \href{https://github.com/JN513/EA701}{https://github.com/JN513/EA701} 
+\textbf{Vídeo:} Disponível em: \url{https://youtube.com/shorts/5u4Is1JvaQc}
 
 \subsection{Discução}
 
@@ -294,7 +376,7 @@ Além disso, o uso de IRQs eliminaria a necessidade do loop de varredura dos bot
 \textbf{Pergunta:} Testar e filmar o funcionamento (todas as combinações RGB). Inclua seu filme com um link público do youtube. \\
 
 \noindent
-\textbf{Vídeo:} Disponível em: \href{https://github.com/JN513/EA701}{https://github.com/JN513/EA701} 
+\textbf{Vídeo:} Disponível em: \url{https://youtube.com/shorts/oYjkGLXbk-M}
 
 \subsection{Comparação de simplicidade}
 

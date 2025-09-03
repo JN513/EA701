@@ -6,7 +6,7 @@
 #define BTN_A 5
 #define BTN_B 6
 #define BTN_C 10
-#define DEBOUNCE_MS 20
+#define DEBOUNCE_MS 40
 
 int main() {
     stdio_init_all();
