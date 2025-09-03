@@ -1,7 +1,7 @@
 from machine import Pin
 import utime
 
-DEBOUNCE_MS = 20
+DEBOUNCE_MS = 40
 
 # === Classes ===
 class LedRGB:
