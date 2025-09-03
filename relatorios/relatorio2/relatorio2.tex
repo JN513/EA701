@@ -10,15 +10,125 @@
 \usepackage{amsmath}
 \usepackage{hyperref}
 
-\title{Roteiro 2}
+\title{Relatório Experimental - GPIOs e PWM na BitDogLab}
 \author{Ana Beatriz Barbosa Yoshida - RA: 245609 \\ Julio Nunes Avelar - RA: 241163}
-\date{Agosto de 2025}
+\date{3 de Setembro de 2025}
 
 \begin{document}
 
 \maketitle
 
-\tableofcontents
-\newpage
+\section{Objetivos}
+\begin{itemize}
+    \item Gerar um sinal PWM ajustável em frequência e duty cycle (GPIO0).
+    \item Medir esse sinal através de um pino de probe (GPIO1) e exibir os valores no display OLED.
+    \item Avaliar a integridade do sinal em diferentes condições de conexão, incluindo degradação intencional com protoboards e cabos.
+    \item Validar os resultados com o auxílio de um osciloscópio.
+\end{itemize}
+
+\section{Materiais Utilizados}
+\begin{itemize}
+    \item BitDogLab
+    \item Protoboard
+    \item Jumpers
+    \item Osciloscópio
+    \item 1 LED vermelho
+    \item 1 resistor de 220 ohm
+    \item Outros
+\end{itemize}
+
+\section{Procedimentos}
+
+\subsection{Configuração do Gerador PWM}
+\begin{itemize}
+    \item Programe a GPIO0 como saída PWM.
+    \item Configure a frequência e o duty cycle como variáveis ajustáveis:
+    \begin{itemize}
+        \item Joystick eixo X: variação da frequência.
+        \item Joystick eixo Y: variação do duty cycle.
+        \item Botões A e B: ajuste fino (incrementar/decrementar).
+    \end{itemize}
+    \item Sugestão: Teste o sinal conectando um LED na GPIO0 com resistor limitador (opcional, apenas para visualização qualitativa).
+\end{itemize}
+Explique como foi configurada a GPIO0 para gerar o sinal PWM e como os controles (joystick e botões) foram utilizados. \\
+Inclua o link do Github do seu código. 
+
+\subsection{Implementação do Probe Digital}
+\begin{itemize}
+    \item Programe a GPIO2 como entrada digital.
+    \item Faça a conexão física GPIO0 $\rightarrow$ GPIO1 com um jumper.
+    \item Desenvolva uma rotina que:
+    \begin{itemize}
+        \item Conte pulsos de subida e descida para calcular a frequência.
+        \item Meça o tempo em nível alto e baixo para calcular o duty cycle.
+        \item Exiba os valores medidos no OLED em tempo real.
+    \end{itemize}
+\end{itemize}
+Explique como foi feita a conexão física (GPIO0 $\rightarrow$ GPIO1) e como o programa realizou a medição de frequência e duty cycle. \\
+Inclua o link do Github do seu código. 
+
+\subsection{Testes Diretos}
+Ajuste valores distintos de frequência e duty cycle (ex.: 100 Hz, 1 kHz, 10 kHz; duty 25\%, 50\%, 75\%). \\
+
+\begin{itemize}
+    \item Conecte o canal 1 do osciloscópio na GPIO0 (sinal gerado).
+    \item Conecte o canal 2 na GPIO1 (sinal após degradação).
+    \item Compare:
+    \begin{itemize}
+        \item Forma de onda (bordas, ruído, integridade).
+        \item Valores medidos internamente (OLED) $\times$ osciloscópio.
+    \end{itemize}
+\end{itemize}
+
+Anote os valores programados e os valores medidos no OLED.
+
+
+\begin{table}[H]
+    \centering
+    \label{tab:dados_coletados}
+    \begin{tabular}{lccccc}
+        \toprule
+        \textbf{Freq. Programada} & \textbf{Duty Programado} & \textbf{Freq. Medida (OLED)} & \textbf{Duty Medido (OLED)} & \textbf{Osciloscópio} & \textbf{Observações} \\
+        \midrule
+        & & & & & \\
+        & & & & & \\
+        \bottomrule
+    \end{tabular}
+    \caption{Dados coletados durante os testes.}
+\end{table}
+
+\subsection{Testes com Degradação do Sinal}
+Monte o caminho do sinal passando por protoboards, fios longos e conectores extras. \\
+
+Observe no OLED e no osciloscópio:
+\begin{itemize}
+    \item Mudanças de frequência/duty cycle medidos.
+    \item Distorção de borda ou presença de ruídos.
+\end{itemize}
+
+Registre fotos e um vídeo curto da montagem e dos resultados. \\
+Descreva a montagem com fios longos, protoboards e conectores. Inclua fotos da montagem. \\
+Apresente nova tabela com os resultados obtidos.
+
+\section{Resultados}
+Apresente as diferenças observadas entre os valores programados, medidos pelo OLED e confirmados no osciloscópio. \\
+Insira gráficos ou capturas de tela do osciloscópio, se disponíveis.
+
+\section{Discussão}
+Analise os resultados obtidos:
+\begin{itemize}
+    \item Houve diferença significativa entre o valor teórico e o medido?
+    \item Como a degradação do sinal afetou as medidas?
+    \item O que o osciloscópio mostrou de diferente em relação ao OLED?
+    \item Quais fatores elétricos explicam essas diferenças (ruído, capacitância da protoboard, resistência dos cabos, etc.)?
+\end{itemize}
+
+\section{Conclusão}
+Resuma em 1 ou 2 parágrafos o que foi aprendido com a atividade em termos de:
+\begin{itemize}
+    \item Uso de GPIOs e PWM.
+    \item Medição de sinais digitais.
+    \item Influência da qualidade das conexões na integridade do sinal.
+\end{itemize}
 
 \end{document}
