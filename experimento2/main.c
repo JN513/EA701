@@ -1,30 +1,27 @@
 #include "pico/stdlib.h"
 
-#define LED 13
-#define BTN 5
+typedef struct {
+    uint r, g, b;
+} LedRGB;
 
-int main() {
+void led_init(LedRGB* L, uint rp, uint gp, uint bp){
+    L->r = rp; L->g = gp; L->b = bp;
+    gpio_init(rp); gpio_set_dir(rp, GPIO_OUT);
+    gpio_init(gp); gpio_set_dir(gp, GPIO_OUT);
+    gpio_init(bp); gpio_set_dir(bp, GPIO_OUT);
+}
+
+void led_set(LedRGB* L, bool r, bool g, bool b){
+    gpio_put(L->r, r); gpio_put(L->g, g); gpio_put(L->b, b);
+}
+
+int main(){
     stdio_init_all();
-    gpio_init(LED); gpio_set_dir(LED, GPIO_OUT);
-    gpio_init(BTN); gpio_set_dir(BTN, GPIO_IN); gpio_pull_down(BTN);
+    LedRGB led;
+    led_init(&led, 13, 11, 12);
 
-    bool last = false, state = false;
-
-    // Defina aqui a carga artificial: número de iterações do laço vazio
-    int N = 8000;   // experimente 2000, 8000, 32000, 128000
-
-    while (true) {
-        bool v = gpio_get(BTN);
-        if (v && !last) {
-            state = !state;
-            gpio_put(LED, state);
-            sleep_ms(20);   // debounce simples
-        }
-        last = v;
-
-        // Laço vazio para simular CPU ocupada
-        for (volatile int i=0; i<N; i++) {
-            __asm volatile("nop"); // "no operation" - só gasta tempo
-        }
-    }
+    led_set(&led,1,0,0); sleep_ms(500);
+    led_set(&led,0,1,0); sleep_ms(500);
+    led_set(&led,0,0,1); sleep_ms(500);
+    led_set(&led,0,0,0);
 }

@@ -1,30 +1,21 @@
 from machine import Pin
-import utime, time
+import time
 
-led = Pin(13, Pin.OUT)
-btn = Pin(5, Pin.IN, Pin.PULL_UP)
+class LedRGB:
+    def __init__(self, r=13, g=11, b=12):
+        self.r = Pin(r, Pin.OUT)
+        self.g = Pin(g, Pin.OUT)
+        self.b = Pin(b, Pin.OUT)
 
-last_ms = 0
-state = 0
+    def set(self, r=0, g=0, b=0):
+        self.r.value(r)
+        self.g.value(g)
+        self.b.value(b)
 
-# Callback executado automaticamente quando o botão é pressionado
-def on_press(pin):
-    global last_ms, state
-    now = utime.ticks_ms()
-    if utime.ticks_diff(now, last_ms) < 150:  # debounce ~20 ms
-        return
-    last_ms = now
-    state ^= 1
-    led.value(state)
+    def off(self):
+        self.set(0,0,0)
 
-# Registra a função como interrupção na borda de subida
-btn.irq(trigger=Pin.IRQ_FALLING
-, handler=on_press)
-
-N = 256000
-last = 0
-
-while True:
-    # Laço vazio para simular CPU ocupada
-    for _ in range(N):
-        pass
+led = LedRGB()
+led.set(1,0,0)  # vermelho
+time.sleep(1)
+led.off()

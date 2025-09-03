@@ -1,0 +1,24 @@
+flowchart TD
+    A[Início] --> B[Loop while True]
+
+    B --> C{Botão A pressionado?}
+    C -->|Sim| D[Verifica debounce A]
+    C -->|Não| G{Botão B pressionado?}
+
+    D -->|OK| E[Alterna LED Vermelho r_on ^= 1]
+    E --> F["apply_leds()"]
+
+    G -->|Sim| H[Verifica debounce B]
+    G -->|Não| J{Botão C pressionado?}
+
+    H -->|OK| I[Alterna LED Azul b_on ^= 1]
+    I --> F
+
+    J -->|Sim| K[Verifica debounce C]
+    J -->|Não| M[Sleep 2ms]
+
+    K -->|OK| L[Alterna LED Verde g_on ^= 1]
+    L --> F
+
+    F --> M
+    M --> B
