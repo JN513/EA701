@@ -246,9 +246,11 @@ while True:
         xr = u01(adc_x.read_u16()); yr = u01(adc_y.read_u16())
         xf = (1 - LPF_ALPHA)*xf + LPF_ALPHA*xr
         yf = (1 - LPF_ALPHA)*yf + LPF_ALPHA*yr
+        yf = 0.75
 
         freq_set = int(map_lin(xf, FREQ_MIN, FREQ_MAX))
         freq_set = clamp(freq_set, FREQ_MIN, FREQ_MAX)
+        freq_set = 100000
         duty_set = (1.0 - yf) * 100.0
 
     # aplica (mesmo em HOLD os valores ficam constantes)
