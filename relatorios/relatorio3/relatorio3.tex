@@ -9,126 +9,244 @@
 \usepackage{booktabs}
 \usepackage{amsmath}
 \usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{makecell}
+\usepackage{subcaption} % no preâmbulo
 
-\title{Relatório Experimental - GPIOs e PWM na BitDogLab}
+\title{Relatório Experimental - Sinais Analógicos, ADC, PWM e DAC }
 \author{Ana Beatriz Barbosa Yoshida - RA: 245609 \\ Julio Nunes Avelar - RA: 241163}
-\date{3 de Setembro de 2025}
+\date{10 de Setembro de 2025}
 
 \begin{document}
 
 \maketitle
 
 \section{Objetivos}
+
 \begin{itemize}
-    \item Gerar um sinal PWM ajustável em frequência e duty cycle (GPIO0).
-    \item Medir esse sinal através de um pino de probe (GPIO1) e exibir os valores no display OLED.
-    \item Avaliar a integridade do sinal em diferentes condições de conexão, incluindo degradação intencional com protoboards e cabos.
-    \item Validar os resultados com o auxílio de um osciloscópio.
+    \item Compreender como sinais analógicos são lidos via ADC.
+    \item Controlar parâmetros de PWM com o joystick (entrada analógica → processamento digital → saída PWM).
+    \item Utilizar filtro RC externo para transformar PWM em sinal analógico.
+    \item Verificar a tensão filtrada no ADC e compará-la com o valor esperado pelo duty cycle.
 \end{itemize}
 
-\section{Materiais Utilizados}
-\begin{itemize}
+\section{Lista de Materiais}
+
+\subsection{Equipamentos}
+
+\begin{enumerate}
     \item BitDogLab
-    \item Protoboard
-    \item Jumpers
-    \item Osciloscópio
-    \item 1 LED vermelho
-    \item 1 resistor de 220 ohm
-    \item Outros
-\end{itemize}
+    \item Protoboard Pequena
+    \item Multímetro digital
+    \item Osciloscópio Digital
+\end{enumerate}
 
-\section{Procedimentos}
+\subsection{Componentes}
 
-\subsection{Configuração do Gerador PWM}
-\begin{itemize}
-    \item Programe a GPIO0 como saída PWM.
-    \item Configure a frequência e o duty cycle como variáveis ajustáveis:
-    \begin{itemize}
-        \item Joystick eixo X: variação da frequência.
-        \item Joystick eixo Y: variação do duty cycle.
-        \item Botões A e B: ajuste fino (incrementar/decrementar).
-    \end{itemize}
-    \item Sugestão: Teste o sinal conectando um LED na GPIO0 com resistor limitador (opcional, apenas para visualização qualitativa).
-\end{itemize}
-Explique como foi configurada a GPIO0 para gerar o sinal PWM e como os controles (joystick e botões) foram utilizados. \\
-Inclua o link do Github do seu código. 
+\begin{enumerate}
+    \item Resistor 10k
+    \item Capacitor 100nf
+    \item Resistor 1k
+    \item Jumpers macho macho e macho femeá
+\end{enumerate}
 
-\subsection{Implementação do Probe Digital}
-\begin{itemize}
-    \item Programe a GPIO2 como entrada digital.
-    \item Faça a conexão física GPIO0 $\rightarrow$ GPIO1 com um jumper.
-    \item Desenvolva uma rotina que:
-    \begin{itemize}
-        \item Conte pulsos de subida e descida para calcular a frequência.
-        \item Meça o tempo em nível alto e baixo para calcular o duty cycle.
-        \item Exiba os valores medidos no OLED em tempo real.
-    \end{itemize}
-\end{itemize}
-Explique como foi feita a conexão física (GPIO0 $\rightarrow$ GPIO1) e como o programa realizou a medição de frequência e duty cycle. \\
-Inclua o link do Github do seu código. 
+\subsection{Opcionais}
 
-\subsection{Testes Diretos}
-Ajuste valores distintos de frequência e duty cycle (ex.: 100 Hz, 1 kHz, 10 kHz; duty 25\%, 50\%, 75\%). \\
+\begin{enumerate}
+    \item Resistores extras
+    \item Capacitores extras
+\end{enumerate}
+
+\section{Etapas}
+
+\subsection{Leitura do Joystick}
 
 \begin{itemize}
-    \item Conecte o canal 1 do osciloscópio na GPIO0 (sinal gerado).
-    \item Conecte o canal 2 na GPIO1 (sinal após degradação).
-    \item Compare:
+    \item Usar \texttt{GPIO26} (eixo Y) e \texttt{GPIO27} (eixo X) como entradas ADC.
+    \item Conceitos trabalhados:
     \begin{itemize}
-        \item Forma de onda (bordas, ruído, integridade).
-        \item Valores medidos internamente (OLED) $\times$ osciloscópio.
+        \item Conversão analógico-digital.
+        \item Resolução (12 bits = 4096 níveis).
+        \item Quantização e relação valor digital $\leftrightarrow$ tensão real.
     \end{itemize}
 \end{itemize}
 
-Anote os valores programados e os valores medidos no OLED.
+\noindent
+\textbf{Exercício}: mover o joystick e observar como o valor ADC varia proporcionalmente.
 
+\begin{itemize}
+    \item Mostrar no OLED os valores lidos (0–4095 → 0 a 3,3 V).
+    \item Fotografe e comente.
+\end{itemize}
 
-\begin{table}[H]
+\noindent
+\textbf{Resposta:} As figuras \ref{fig:foto1} e \ref{fig:foto2} mostram a leitura no OLED em dois casos distintos: no primeiro, com um duty próximo a 0\%, onde o nível de tensão esperado é próximo de 0 V, e no segundo, com um duty próximo a 100\%, onde o valor esperado é próximo de 3.3 V. É perceptível que a leitura não é exata, apresentando uma pequena margem de erro nos valores obtidos.
+
+\begin{figure}[H]
     \centering
-    \label{tab:dados_coletados}
-    \begin{tabular}{lccccc}
+    \begin{minipage}{0.45\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{foto1.jpeg}
+        \caption{Imagem no OLED com duty próximo a 0\%}
+        \label{fig:foto1}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.45\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{foto2.jpeg}
+        \caption{Imagem no OLED com duty próximo a 100\%}
+        \label{fig:foto2}
+    \end{minipage}
+\end{figure}
+
+\subsection{PWM controlado pelo Joystick}
+
+\begin{itemize}
+    \item Usar \texttt{GPIO0} (ou \texttt{GPIO1}) como saída PWM.
+    \item Controlar o duty cycle com o eixo X (0--100\%).
+    \item Controlar a frequência com o eixo Y (100 Hz -- 20 kHz).
+    \item Exibir no OLED: Duty (\%) e Frequência (Hz).
+    \item Medir o sinal com o osciloscópio ou multímetro em modo de duty/frequência.
+    \item \textbf{Observação:} reaproveite do experimento anterior.
+\end{itemize}
+
+\noindent
+\textbf{Exercício:} variar o joystick e observar no display e no osciloscópio a mudança em tempo real. Observe que varia em toda a escala. 
+
+\subsection{Filtro RC e Conversão Digital–Analógica}
+
+\begin{itemize}
+    \item Montar na protoboard um filtro RC passa-baixa:
+    \begin{itemize}
+        \item Exemplo: R = 10 k$\Omega$ e C = 100 nF $\rightarrow$ $f_c \approx 160$ Hz.
+    \end{itemize}
+    \item Conectar o PWM (\texttt{GPIO0}) à entrada do filtro.
+    \item Saída do filtro $\rightarrow$ conectar ao ADC (\texttt{GPIO28}).
+    \item Mostrar no OLED a tensão média medida pelo ADC e comparar com o valor esperado pelo duty cycle.
+\end{itemize}
+
+\section{Passo 1 - Configuração}
+
+\begin{itemize}
+    \item Monte um filtro RC passa-baixas. 
+    \begin{itemize}
+        \item Valores sugeridos: R = 10 k$\Omega$, C = 100 nF ($f_c \approx 160$ Hz).
+    \end{itemize}
+    \item Configure a entrada analógica: saída do filtro RC conectada ao ADC (\texttt{GPIO28}). 
+    \begin{itemize}
+        \item \textbf{Obs:} certifique-se em mudar a posição do jumper que conecta o \texttt{GPIO28} ao microfone, trazendo para os pontos de conexão externa (barra de terminal ou conector IDC).
+    \end{itemize}
+    \item Configure o \texttt{GPIO0} para gerar um sinal PWM variando o duty cycle de 0\% a 100\%, em passos de 10\%. Defina uma frequência adequada.
+\end{itemize}
+
+\section{Passo 2 - Tabela de medições}
+
+\noindent
+Crie uma planilha com uma tabela. Para cada duty:
+
+\begin{itemize}
+    \item Meça a tensão na saída do filtro (multímetro ou ADC $\rightarrow$ OLED).
+    \item Calcule a tensão esperada: 
+    \begin{equation}
+        V_{exp} = V_{DD} \times \frac{Duty}{100}
+    \end{equation}
+
+    \item Plote o gráfico:
+    \begin{itemize}
+        \item Eixo $x$: duty cycle.
+        \item Eixo $y$: tensão medida ($V_{exp}$).
+    \end{itemize}
+\end{itemize}
+
+\begin{table}[ht!]
+    \centering
+    \begin{tabular}{|l|c|c|c|}
         \toprule
-        \textbf{Freq. Programada} & \textbf{Duty Programado} & \textbf{Freq. Medida (OLED)} & \textbf{Duty Medido (OLED)} & \textbf{Osciloscópio} & \textbf{Observações} \\
+        Duty (\%) & Valor medido (V)& Valor esperado (V) & Erro ($V_{exp} - V_{obt}$) \\
         \midrule
-        & & & & & \\
-        & & & & & \\
-        \bottomrule
+        0 & 0 & 0 & 0 \\
+        15 & 0.49 & 0.495 & 0.005 \\
+        30 & 0.98 & 0.99 & 0.01 \\
+        50 & 1.65 & 1.65 & 0 \\
+        65 & 2.12 & 2.145 & 0.025 \\
+        75 & 2.51 & 2.475 & 0.035 \\
+        100 & 3.29 & 3.3 & 0.01  \\
+         \bottomrule
     \end{tabular}
-    \caption{Dados coletados durante os testes.}
+    \caption{Tabela com os valores medidos}
+    \label{tab:medidas}
 \end{table}
 
-\subsection{Testes com Degradação do Sinal}
-Monte o caminho do sinal passando por protoboards, fios longos e conectores extras. \\
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{grafico_duty.pdf}
+    \caption{Gráfico comparando os valores obtidos e esperados}
+    \label{fig:grafico}
+\end{figure}
 
-Observe no OLED e no osciloscópio:
+\noindent
+\textbf{Resposta:} A Tabela \ref{tab:medidas} apresenta os valores medidos, os valores teóricos esperados e o respectivo erro. Observa-se que o erro obtido é relativamente baixo, considerando o método utilizado para a geração do sinal analógico. Já o Gráfico \ref{fig:grafico} evidencia a diferença entre os valores obtidos e os esperados, bem como o erro em cada ponto, mostrando que em todos os casos o erro permaneceu abaixo de 40 mV.
+
+\section{Passo 3 - Gráfico de erro}
+
+\noindent
+Depois de preencher suas medições, crie um gráfico de erro  vs duty (\%). Use o eixo secundário y para mostrar o gráfico de erro.
+
+\noindent
+Com o valor medido para cada ponto, calcule: 
+
+\begin{equation}
+    \text{Erro (V)} = V_{med} - V_{exp}
+\end{equation}
+\begin{equation}
+    \text{Erro (\%)} = 100 \times \frac{V_{med} - V_{exp}}{V_{DD}}
+\end{equation}
+
+\noindent
+\textbf{Resposta:} A Figura \ref{fig:graficodeerro} apresenta o gráfico comparando o erro percentual em função do duty cycle (\%).
+
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=0.9\linewidth]{erro_medição.pdf}
+    \caption{Gráfico de erro}
+    \label{fig:graficodeerro}
+\end{figure}
+
+\subsection{Dicas para boa qualidade das medições}
+
 \begin{itemize}
-    \item Mudanças de frequência/duty cycle medidos.
-    \item Distorção de borda ou presença de ruídos.
+    \item Aguarde alguns milissegundos após mudar o duty para o RC estabilizar ($\approx 3$--$5 \cdot RC$).
+    \item Meça em múltiplos pontos e use a média para reduzir ruído.
+    \item Para reduzir ripple:
+    \begin{itemize}
+        \item Aumente a frequência do PWM, ou
+        \item Aumente $C$ (com cuidado, a resposta ficará mais lenta).
+    \end{itemize}
+    \item Documente a frequência do PWM utilizada — faz diferença no ripple.
 \end{itemize}
 
-Registre fotos e um vídeo curto da montagem e dos resultados. \\
-Descreva a montagem com fios longos, protoboards e conectores. Inclua fotos da montagem. \\
-Apresente nova tabela com os resultados obtidos.
+\noindent
+\textbf{Resposta:} Utilizou-se uma frequência de 10 kHz; anteriormente, havia sido utilizada uma frequência de 1 kHz. É perceptível uma redução considerável no efeito de ripple ao aumentar a frequência. As figuras \ref{fig:lowduty}, \ref{fig:halfduty} e \ref{fig:fullduty} ilustram a saída observada no osciloscópio para diferentes valores de duty cycle — respectivamente 0\%, 50\% e 100\% — mostrando que o ripple atingiu valores mínimos em todas as condições.
 
-\section{Resultados}
-Apresente as diferenças observadas entre os valores programados, medidos pelo OLED e confirmados no osciloscópio. \\
-Insira gráficos ou capturas de tela do osciloscópio, se disponíveis.
+\begin{figure}
+    \centering
+    \includegraphics[width=0.9\linewidth]{low_duty.jpeg}
+    \caption{Duty em 0\%}
+    \label{fig:lowduty}
+\end{figure}
 
-\section{Discussão}
-Analise os resultados obtidos:
-\begin{itemize}
-    \item Houve diferença significativa entre o valor teórico e o medido?
-    \item Como a degradação do sinal afetou as medidas?
-    \item O que o osciloscópio mostrou de diferente em relação ao OLED?
-    \item Quais fatores elétricos explicam essas diferenças (ruído, capacitância da protoboard, resistência dos cabos, etc.)?
-\end{itemize}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.9\linewidth]{half_duty.jpeg}
+    \caption{Duty em 50\%}
+    \label{fig:halfduty}
+\end{figure}
 
-\section{Conclusão}
-Resuma em 1 ou 2 parágrafos o que foi aprendido com a atividade em termos de:
-\begin{itemize}
-    \item Uso de GPIOs e PWM.
-    \item Medição de sinais digitais.
-    \item Influência da qualidade das conexões na integridade do sinal.
-\end{itemize}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.9\linewidth]{full_duty.jpeg}
+    \caption{Duty em 100\%}
+    \label{fig:fullduty}
+\end{figure}
 
 \end{document}
