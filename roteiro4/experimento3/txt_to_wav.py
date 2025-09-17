@@ -12,4 +12,4 @@ audio_data = (data.astype(np.int32) - 32768).astype(np.int16)
 
 
 # salvar
-write("nome_do_arquivo.wav", (inserir taxa de amostragem), audio_data)
+write("nome_do_arquivo.wav", 20000, audio_data)

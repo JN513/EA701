@@ -4,7 +4,7 @@ import struct
 
 
 # Configurações
-input_file = "arquivo_audio.txt"   # arquivo com valores do ADC separados por vírgula
+input_file = "dados2.txt"   # arquivo com valores do ADC separados por vírgula
 output_file = "saida.wav"  # arquivo wav gerado
 sample_rate = 40000        # Hz
 

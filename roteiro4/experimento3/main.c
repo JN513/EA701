@@ -5,6 +5,7 @@
 #include "hardware/dma.h"
 
 
+
 #define BUTTON_PIN 5
 
 
@@ -18,6 +19,8 @@ uint16_t capture_buf[CAPTURE_DEPTH];
 int main() {
     stdio_init_all();
 
+    sleep_ms(5000); // dá tempo para conectar terminal
+    printf("Pressione o botão para iniciar a captura...\n");
 
     gpio_init(BUTTON_PIN);
     gpio_set_dir(BUTTON_PIN, false);
@@ -85,7 +88,9 @@ while (gpio_get(BUTTON_PIN) == 1) {
 
 
     // Print samples to stdout so you can display them in pyplot, excel, matlab
-    for (int i = 0; i < CAPTURE_DEPTH; ++i) {
+    /*for (int i = 0; i < CAPTURE_DEPTH; ++i) {
         printf("%-3d, ", capture_buf[i]);
-    }
+    }*/
+
+    
 }

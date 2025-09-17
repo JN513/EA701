@@ -6,6 +6,10 @@ int main() {
     const int N = 10000;
     static uint8_t buf[10000];
 
+    sleep_ms(5000);
+
+    printf("Hello, World!\n");
+
     absolute_time_t t0 = get_absolute_time();
     for (int i = 0; i < N; i++) buf[i] = i & 0xFF;
     absolute_time_t t1 = get_absolute_time();
@@ -15,3 +19,6 @@ int main() {
 
     while (1) tight_loop_contents();
 }
+// RAM write (10000 bytes): 0.001 ms
+// RAM write (10000 bytes): 0.001 ms
+// RAM write (10000 bytes): 0.001 ms

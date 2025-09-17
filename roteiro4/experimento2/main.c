@@ -12,7 +12,8 @@ uint8_t WRBUF[PAGE_SIZE];
 
 int main() {
     stdio_init_all();
-    sleep_ms(500); // dá tempo para conectar terminal
+    sleep_ms(5000); // dá tempo para conectar terminal
+    printf("Flash operations timing:\n");
 
     // Preenche buffer
     for (int i=0;i<PAGE_SIZE;i++) WRBUF[i] = i & 0xFF;
@@ -55,6 +56,28 @@ int main() {
 
     double big_prog_ms = absolute_time_diff_us(t0, t1)/1000.0;
     printf("Flash PROGRAM (32KB): %.3f ms\n", big_prog_ms);
-    
+
     while (1) tight_loop_contents();
 }
+
+/*
+Flash ERASE (setor 4096 bytes): 29.914 ms
+Flash PROGRAM (pagina 256 bytes): 0.580 ms
+Flash PROGRAM (32KB): 73.777 ms
+
+Flash ERASE (setor 4096 bytes): 28.952 ms
+Flash PROGRAM (pagina 256 bytes): 0.579 ms
+Flash PROGRAM (32KB): 73.765 ms
+
+Flash ERASE (setor 4096 bytes): 29.716 ms
+Flash PROGRAM (pagina 256 bytes): 0.578 ms
+Flash PROGRAM (32KB): 73.774 ms
+
+Flash ERASE (setor 4096 bytes): 30.234 ms
+Flash PROGRAM (pagina 256 bytes): 0.579 ms
+Flash PROGRAM (32KB): 73.757 ms
+
+Flash ERASE (setor 4096 bytes): 32.233 ms
+Flash PROGRAM (pagina 256 bytes): 0.580 ms
+Flash PROGRAM (32KB): 73.765 ms
+*/
