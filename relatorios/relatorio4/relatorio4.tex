@@ -1,0 +1,43 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[brazil]{babel}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{makecell}
+\usepackage{subcaption} % no preâmbulo
+
+\title{Relatório Experimental - Persistência em Memória (RAM vs Flash)}
+\author{Ana Beatriz Barbosa Yoshida - RA: 245609 \\ Julio Nunes Avelar - RA: 241163}
+\date{17 de Setembro de 2025}
+
+\begin{document}
+
+\maketitle
+
+\section{Objetivos}
+
+Compreender a diferença entre memória volátil (RAM) e memória não volátil (Flash) no RP2040, experimentando formas de salvar e recuperar informações no microcontrolador.
+
+Aplicar isso em um exemplo prático: guardar o “estado” de um LED RGB e restaurá-lo após reiniciar a placa.
+
+\section{Tarefa}
+
+\begin{enumerate}
+    \item Compare o uso de RAM (variáveis normais) versus Flash (persistência após reset).
+    \item Meça o tempo de gravação em cada caso (em ms)
+    \item Discuta
+    \begin{enumerate}
+        \item Quando é necessário gravar na Flash?
+        \item Quais riscos existem (ex.: desgaste, energia no meio da escrita)?
+        \item Que boas práticas adotar (salvar só quando necessário, agrupar dados em estrutura única, etc.).
+    \end{enumerate}
+\end{enumerate}
+
+\end{document}
