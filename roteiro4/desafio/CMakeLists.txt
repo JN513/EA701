@@ -11,7 +11,7 @@ add_executable(main
     )
 
 # pull in common dependencies
-target_link_libraries(main pico_stdlib hardware_adc hardware_dma)
+target_link_libraries(main pico_stdlib)
 
 pico_enable_stdio_usb(main 1)
 
