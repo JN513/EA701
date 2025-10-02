@@ -88,9 +88,9 @@ while (gpio_get(BUTTON_PIN) == 1) {
 
 
     // Print samples to stdout so you can display them in pyplot, excel, matlab
-    /*for (int i = 0; i < CAPTURE_DEPTH; ++i) {
+    for (int i = 0; i < CAPTURE_DEPTH; ++i) {
         printf("%-3d, ", capture_buf[i]);
-    }*/
+    }
 
     
 }
